@@ -194,8 +194,8 @@ Transform:
   m_GameObject: {fileID: 3368765348994193715}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.7, y: -0.00000020861626, z: 1.0577471}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 666161979612148365}
   - {fileID: 3496731235419875993}
@@ -218,7 +218,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 68
   m_CollisionDetection: 0
 --- !u!65 &8568455238967844231
 BoxCollider:
@@ -229,10 +229,10 @@ BoxCollider:
   m_GameObject: {fileID: 3368765348994193715}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.49210763, z: 3.1613832}
-  m_Center: {x: 0, y: 0.18408653, z: -0.0581069}
+  m_Size: {x: 2, y: 0.5, z: 3.5}
+  m_Center: {x: 0, y: 0.27, z: 0}
 --- !u!114 &8568455238967844228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,12 +245,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90d8f2958f7436e41bd7681a138cc984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
-  angularSpeed: 80
+  speed: 15
+  angularSpeed: 3
   acceleration: 8
-  deceleration: 0.2
+  deceleration: 0.5
   heturistics: 1
   grounder: {fileID: 0}
+  grounded: 1
 --- !u!1 &3496731234912331380
 GameObject:
   m_ObjectHideFlags: 0

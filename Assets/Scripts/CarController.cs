@@ -21,7 +21,7 @@ public class CarController : MonoBehaviour
     public bool heturistics = true;
 
     public BoxCollider grounder;
-    bool grounded  = false;
+    public bool grounded  = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -72,13 +72,13 @@ public class CarController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        grounded = true;
-    }
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     grounded = true;
+    // }
 
-    private void OnTriggerExit(Collider other)
-    {
-        grounded = false;
-    }
+    // private void OnTriggerExit(Collider other)
+    // {
+    //     grounded = false;
+    // }
 }
