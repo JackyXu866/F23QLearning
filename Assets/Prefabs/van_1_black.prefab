@@ -359,8 +359,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 0.5, z: 3.5}
-  m_Center: {x: 0, y: 0.27, z: 0}
+  m_Size: {x: 2.15, y: 0.5, z: 4.5}
+  m_Center: {x: 0, y: 1, z: -0.05}
 --- !u!114 &8568455238967844228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,14 +376,15 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
+  MaxStep: 5000
   speed: 15
   angularSpeed: 3
   acceleration: 8
   deceleration: 0.5
-  heturistics: 1
+  checkpoint: 0
   grounder: {fileID: 0}
   grounded: 1
+  isTraining: 1
 --- !u!114 &7116217182623611424
 MonoBehaviour:
   m_ObjectHideFlags: 0

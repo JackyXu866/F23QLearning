@@ -2497,29 +2497,9 @@ PrefabInstance:
       propertyPath: m_BrainParameters.VectorObservationSize
       value: 8
       objectReference: {fileID: 0}
-    - target: {fileID: 8568455238967844228, guid: b10f89b326047bb4dbd359e72f800adf, type: 3}
-      propertyPath: MaxStep
-      value: 5000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8568455238967844231, guid: b10f89b326047bb4dbd359e72f800adf, type: 3}
-      propertyPath: m_Size.x
-      value: 2.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 8568455238967844231, guid: b10f89b326047bb4dbd359e72f800adf, type: 3}
-      propertyPath: m_Size.z
-      value: 4.5
-      objectReference: {fileID: 0}
     - target: {fileID: 8568455238967844231, guid: b10f89b326047bb4dbd359e72f800adf, type: 3}
       propertyPath: m_Enabled
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8568455238967844231, guid: b10f89b326047bb4dbd359e72f800adf, type: 3}
-      propertyPath: m_Center.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8568455238967844231, guid: b10f89b326047bb4dbd359e72f800adf, type: 3}
-      propertyPath: m_Center.z
-      value: -0.05
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b10f89b326047bb4dbd359e72f800adf, type: 3}
