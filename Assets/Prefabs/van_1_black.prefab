@@ -50,6 +50,7 @@ MonoBehaviour:
   - Fence
   - CheckPoint
   - Track
+  - FinishLine
   m_RaysPerDirection: 3
   m_MaxRayDegrees: 70
   m_SphereCastRadius: 0.5
@@ -195,6 +196,7 @@ MonoBehaviour:
   - Fence
   - CheckPoint
   - Track
+  - FinishLine
   m_RaysPerDirection: 2
   m_MaxRayDegrees: 70
   m_SphereCastRadius: 0.5
@@ -357,10 +359,10 @@ BoxCollider:
   m_GameObject: {fileID: 3368765348994193715}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 2.15, y: 0.5, z: 4.5}
-  m_Center: {x: 0, y: 1, z: -0.05}
+  m_Center: {x: 0, y: 0.2, z: -0.05}
 --- !u!114 &8568455238967844228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -398,7 +400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 15
+    VectorObservationSize: 8
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 5
@@ -772,14 +774,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3917603119016294954}
-  m_LocalRotation: {x: 0.10541739, y: -0, z: -0, w: 0.9944281}
-  m_LocalPosition: {x: 0, y: 2.93, z: -5.42}
+  m_LocalRotation: {x: 0.2069379, y: -0, z: -0, w: 0.9783541}
+  m_LocalPosition: {x: 0, y: 4.3, z: -5.13}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2705417148821521289}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 12.102, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 23.886, y: 0, z: 0}
 --- !u!20 &7045742001782868989
 Camera:
   m_ObjectHideFlags: 0

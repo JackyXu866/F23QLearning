@@ -129,30 +129,33 @@ public class CarController : Agent
     private void OnTriggerEnter(Collider other)
     {
         // grounded = true;
-        if(isTraining){
+        // if(isTraining){
             if(other.CompareTag("CheckPoint")){
                 checkpoint++;
                 AddReward(10f);
                 other.enabled = false;
-                Debug.Log("checkpoints: " + checkpoint);
+                // Debug.Log("checkpoints: " + checkpoint);
             }
             else if(other.CompareTag("Fence")){
-                AddReward(-1f);
+                AddReward(-2f);
             }
             else if(other.CompareTag("Lawn")){
                 AddReward(-.5f);
             }
             else if(other.CompareTag("FinishLine") && checkpoint == track.checkpointSize){
-                AddReward(100f);
+                AddReward(60f);
                 track.AreaReset();
                 checkpoint = 0;
             }
-        }
+        // }
     }
 
     private void OnTriggerStay(Collider other) {
         if(other.CompareTag("Track")){
-            AddReward(.1f * Time.deltaTime);
+            AddReward(.05f * Time.deltaTime);
+        }
+        else if(other.CompareTag("Lawn")){
+            AddReward(-.05f * Time.deltaTime);
         }
     }
 
