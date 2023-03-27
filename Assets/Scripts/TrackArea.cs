@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class TrackArea : MonoBehaviour
 {
-
+    [SerializeField] GameObject cpParent;
     List<GameObject> checkpoints;
+    public int checkpointSize = 0;
     // Start is called before the first frame update
     void Start()
     {
-        FindCheckPoints(this.transform);
+        FindCheckPoints();
     }
 
     // Update is called once per frame
@@ -29,20 +30,16 @@ public class TrackArea : MonoBehaviour
         {
             BoxCollider collider = checkpoint.GetComponent<BoxCollider>();
             if (collider != null)
-            collider.enabled = true;
+                collider.enabled = true;
         }
     }
 
-    private void FindCheckPoints(Transform parent)
+    private void FindCheckPoints()
     {
-        for (int i = 0; i < parent.transform.childCount; i++)
+        foreach (Transform child in cpParent.transform)
         {
-            Transform child = parent.transform.GetChild(i);
-            if (child.CompareTag("CheckPoint"))
-            {
-                checkpoints.Add(child.gameObject);
-                FindCheckPoints(child);
-            }
+            checkpoints.Add(child.gameObject);
         }
+        checkpointSize = checkpoints.Count - 1;
     }
 }

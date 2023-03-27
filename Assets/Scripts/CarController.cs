@@ -135,17 +135,17 @@ public class CarController : Agent
                 AddReward(10f);
                 other.enabled = false;
                 Debug.Log("checkpoints: " + checkpoint);
-                if (checkpoint >= 7)
-                {
-                    AddReward(50f);
-                    track.AreaReset();
-                }
             }
             else if(other.CompareTag("Fence")){
                 AddReward(-1f);
             }
             else if(other.CompareTag("Lawn")){
                 AddReward(-.5f);
+            }
+            else if(other.CompareTag("FinishLine") && checkpoint == track.checkpointSize){
+                AddReward(100f);
+                track.AreaReset();
+                checkpoint = 0;
             }
         }
     }

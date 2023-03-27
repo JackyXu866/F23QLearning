@@ -8,6 +8,7 @@ TagManager:
   - Fence
   - Track
   - CheckPoint
+  - FinishLine
   layers:
   - Default
   - TransparentFX
