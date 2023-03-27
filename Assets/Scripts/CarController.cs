@@ -29,30 +29,39 @@ public class CarController : Agent
 
     [Header("Training")]
     public bool isTraining = true;
-    Transform ogPos;
+    Vector3 ogPos;
+    Quaternion ogRot;
+
+
+    private TrackArea track;
 
     // ---------------------------------------------
 
     public override void Initialize()
     {
         rb = GetComponent<Rigidbody>();
-        ogPos = transform;
+        ogPos = transform.position;
+        ogRot = transform.rotation;
         if(!isTraining){
             MaxStep = 0;
         }
+        track = GetComponentInParent<TrackArea>();
     }
 
     public override void OnEpisodeBegin()
     {
         if(isTraining){
-            transform.position = ogPos.position;
-            transform.rotation = ogPos.rotation;
+            transform.position = ogPos;
+            transform.rotation = ogRot;
+            Debug.Log(ogPos);
+            track.AreaReset();
         }
 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
         checkpoint = 0;
+        
     }
 
     /// <summary>
@@ -122,14 +131,21 @@ public class CarController : Agent
         // grounded = true;
         if(isTraining){
             if(other.CompareTag("CheckPoint")){
-                // checkpoint++;
-                AddReward(5f);
+                checkpoint++;
+                AddReward(10f);
+                other.enabled = false;
+                Debug.Log("checkpoints: " + checkpoint);
+                if (checkpoint >= 7)
+                {
+                    AddReward(50f);
+                    track.AreaReset();
+                }
             }
             else if(other.CompareTag("Fence")){
-                AddReward(-.5f);
+                AddReward(-1f);
             }
             else if(other.CompareTag("Lawn")){
-                AddReward(-.1f);
+                AddReward(-.5f);
             }
         }
     }
