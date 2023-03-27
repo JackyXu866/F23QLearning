@@ -308,6 +308,42 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4966189235821691648, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: m_Size.x
+      value: 2.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966189235821691648, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: m_Size.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966189235821691648, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: m_Size.z
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966189235821691648, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966189235821691648, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: m_Center.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966189235821691648, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: m_Center.z
+      value: -0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966189235821691651, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: MaxStep
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 5116307832856792267, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5819732342235309223, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: m_BrainParameters.VectorObservationSize
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5858136634141445463, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
       propertyPath: m_Name
       value: Track

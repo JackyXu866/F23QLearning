@@ -2,45 +2,90 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CarController : MonoBehaviour
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Actuators;
+
+public class CarController : Agent
 {
     Rigidbody rb;
 
+    [Header("Movement")]
     public float speed = 10f;
-
     public float angularSpeed = 200f;
-
-
     public float acceleration = 6f;
-
     [Range(0f, 1f)]
     public float deceleration = 0.2f;
 
-  
+    // ---------------------------------------------
 
-    public bool heturistics = true;
+    [Header("Race")]
+    public int checkpoint = 0;
 
     public BoxCollider grounder;
     public bool grounded  = true;
-    // Start is called before the first frame update
-    void Start()
+
+    // ---------------------------------------------
+
+    [Header("Training")]
+    public bool isTraining = true;
+    Transform ogPos;
+
+    // ---------------------------------------------
+
+    public override void Initialize()
     {
         rb = GetComponent<Rigidbody>();
+        ogPos = transform;
+        if(!isTraining){
+            MaxStep = 0;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnEpisodeBegin()
     {
-        if (heturistics)
-        {
-            CarAccelerate(Input.GetAxis("Vertical"));
-            CarTurning(Input.GetAxis("Horizontal"));
+        if(isTraining){
+            transform.position = ogPos.position;
+            transform.rotation = ogPos.rotation;
         }
 
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        checkpoint = 0;
+    }
+
+    /// <summary>
+    /// Index 0: Vertical
+    /// Index 1: Horizontal
+    /// <\summary>
+    public override void OnActionReceived(ActionBuffers actions)
+    {
+        CarAccelerate(actions.ContinuousActions[0]);
+        CarTurning(actions.ContinuousActions[1]);
+    }
+
+    public override void Heuristic(in ActionBuffers actionsOut)
+    {
+        var actions = actionsOut.ContinuousActions;
+        actions[0] = Input.GetAxis("Vertical");
+        actions[1] = Input.GetAxis("Horizontal");
+    }
+
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        // space size + 4
+        sensor.AddObservation(transform.localRotation.normalized);
+
+        // space size + 1
+        sensor.AddObservation(checkpoint);
+
+        // space size + 3
+        sensor.AddObservation(rb.velocity.normalized);
     }
 
 
-    public void CarAccelerate(float rate)
+    void CarAccelerate(float rate)
     {
         if (grounded)
         {
@@ -63,7 +108,7 @@ public class CarController : MonoBehaviour
         }
     }
 
-    public void CarTurning(float rate)
+    void CarTurning(float rate)
     {
         if (Mathf.Abs(Vector3.Dot(rb.velocity, transform.forward)) > float.Epsilon && grounded)
         {
@@ -72,10 +117,28 @@ public class CarController : MonoBehaviour
         }
     }
 
-    // private void OnTriggerEnter(Collider other)
-    // {
-    //     grounded = true;
-    // }
+    private void OnTriggerEnter(Collider other)
+    {
+        // grounded = true;
+        if(isTraining){
+            if(other.CompareTag("CheckPoint")){
+                // checkpoint++;
+                AddReward(5f);
+            }
+            else if(other.CompareTag("Fence")){
+                AddReward(-.5f);
+            }
+            else if(other.CompareTag("Lawn")){
+                AddReward(-.1f);
+            }
+        }
+    }
+
+    private void OnTriggerStay(Collider other) {
+        if(other.CompareTag("Track")){
+            AddReward(.1f * Time.deltaTime);
+        }
+    }
 
     // private void OnTriggerExit(Collider other)
     // {
