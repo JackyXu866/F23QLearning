@@ -6,8 +6,6 @@ public class QtableCar : MonoBehaviour
 {
     Rigidbody rb;
 
-
-
     [Header("Movement")]
     public float speed = 15f;
     public float angularSpeed = 3f;
@@ -15,24 +13,28 @@ public class QtableCar : MonoBehaviour
     [Range(0f, 1f)]
     public float deceleration = 0.5f;
 
-    bool isTraining = false;
 
-    public int actionSize = 2;
-    public int stateSize = 8;
-    float gamma = 0.9f;
-    float epsilon = 0.2f;
-    float alpha = 0.5f;
-
-    public int raySize = 6;
-    [Range(0, 90)]
-    public int halfAngle = 30;
-    float rad;
-    public float range = 20;
-
-    public string[] tags;
-
-
+    [Header("Q Learning")]
+    [SerializeField] bool isTraining = false;
+    [SerializeField] int actionSize = 2;
+    [SerializeField] int stateSize = 8;
+    [SerializeField] float gamma = 0.9f;
+    [SerializeField] float epsilon = 0.2f;
+    [SerializeField] float alpha = 0.5f;
     float[,] Q;
+    float[] states;
+    int stateCount = 0;
+
+    [Header("Raycast")]
+    [SerializeField] int raySize = 6;
+    [Range(0, 90)]
+    [SerializeField] int halfAngle = 30;
+    [SerializeField] float downDeg = -10;
+    [SerializeField] float range = 20;
+    [SerializeField] List<string> tags;
+
+
+    float rad;
 
     TrackArea track;
 
@@ -46,24 +48,34 @@ public class QtableCar : MonoBehaviour
 
     private void Awake()
     {
-        int allobs = raySize * 5 + stateSize;
-        Q = new float[actionSize, allobs];
+        if(raySize % 2 != 0) raySize++;
+
+        stateCount = raySize * tags.Count + stateSize;
+        Q = new float[actionSize, stateCount];
 
         for (int i = 0;  i < actionSize; i++)
         {
 
-            for(int j = 0; j < allobs; j++)
+            for(int j = 0; j < stateCount; j++)
             {
                 Q[i, j] = Random.Range(-0.1f, 0.1f);
             }
         }
+
+        states = new float[stateCount];
     }
 
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        
+        RayCaster(transform.forward, 0);
+        RayCaster(-transform.forward, 1, 0.5f);
+        for(int i=2; i<raySize; i+=2)
+        {
+            RayCaster(transform.forward + transform.right * halfAngle * Mathf.Deg2Rad * (i - 1), i);
+            RayCaster(transform.forward - transform.right * halfAngle * Mathf.Deg2Rad * (i - 1), i + 1);
+        }
     }
 
 
@@ -99,31 +111,36 @@ public class QtableCar : MonoBehaviour
     }
 
 
-    private void RayCaster(int index)
+    private void RayCaster(Vector3 dir, int index, float rangeConst = 1f)
     {
-        float finalrad;
+        dir = dir + transform.up * Mathf.Tan(downDeg * Mathf.Deg2Rad);
+
         RaycastHit hit;
-        float ran;
-        if (index >= 0)
+        Ray r = new Ray(transform.position + transform.up * 0.5f, dir);
+
+        if (Physics.Raycast(r, out hit, range * rangeConst))
         {
-            
-            finalrad = Mathf.PI / 2 - rad + rad * index;
-            ran = range;
+            for(int i = 0; i < tags.Count; i++)
+            {
+                if (hit.collider.CompareTag(tags[i]))
+                {
+                    states[stateSize-1 + index*tags.Count + i] = 1;
+                }
+                else
+                {
+                    states[stateSize-1 + index*tags.Count + i] = 0;
+                }
+            }
+            Debug.DrawRay(r.origin, r.direction * range * rangeConst, Color.red);
         }
         else
         {
-            finalrad = -Mathf.PI / 2 + rad - rad * index;
-            ran = range / 2;
+            for (int i = 0; i < tags.Count; i++)
+            {
+                states[stateSize-1 + index*tags.Count + i] = 0;
+            }
+            Debug.DrawRay(r.origin, r.direction * range * rangeConst, Color.white);
         }
 
-        Vector3 v = Vector3.Normalize(new Vector3(Mathf.Cos(finalrad), 0, Mathf.Sin(finalrad)));
-
-
-        Ray r = new Ray(transform.position, v * ran);
-
-        if (Physics.Raycast(r, out hit, ran))
-        {
-
-        }
     }
 }
