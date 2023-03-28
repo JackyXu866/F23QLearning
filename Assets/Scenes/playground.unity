@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -312,6 +312,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 2072346685462775732, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4966189235821691648, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -319,6 +323,14 @@ PrefabInstance:
     - target: {fileID: 4966189235821691651, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
       propertyPath: isTraining
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5234062859077502340, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: downDeg
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5234062859077502340, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: raySize
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5819732342235309223, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
       propertyPath: m_Model
