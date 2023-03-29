@@ -12,6 +12,7 @@ public class QtableCar : MonoBehaviour
     public float acceleration = 8f;
     [Range(0f, 1f)]
     public float deceleration = 0.5f;
+    int checkpoint = 0;
 
 
     [Header("Q Learning")]
@@ -76,6 +77,9 @@ public class QtableCar : MonoBehaviour
             RayCaster(transform.forward + transform.right * halfAngle * Mathf.Deg2Rad * (i - 1), i);
             RayCaster(transform.forward - transform.right * halfAngle * Mathf.Deg2Rad * (i - 1), i + 1);
         }
+        AddObservation();
+
+        QLearning();
     }
 
 
@@ -141,6 +145,23 @@ public class QtableCar : MonoBehaviour
             }
             Debug.DrawRay(r.origin, r.direction * range * rangeConst, Color.white);
         }
+
+    }
+
+    private void AddObservation(){
+        Quaternion r = transform.localRotation.normalized;
+        states[0] = r.x;
+        states[1] = r.y;
+        states[2] = r.z;
+        states[3] = r.w;
+        Vector3 v = rb.velocity.normalized;
+        states[4] = v.x;
+        states[5] = v.y;
+        states[6] = v.z;
+        states[7] = checkpoint;
+    }
+
+    private void QLearning(){
 
     }
 }
