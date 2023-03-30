@@ -69,6 +69,7 @@ public class QHummingbird : MonoBehaviour
 
     int state;
 
+    int drinkedFlower = 0;
 
 
     // Start is called before the first frame update
@@ -364,6 +365,9 @@ public class QHummingbird : MonoBehaviour
         //reset nectar obtained
         nectarObtained = 0f;
 
+
+        reward = 0;
+        
         //zero out velocities
         rigidbody.velocity = Vector3.zero;
         rigidbody.angularVelocity = Vector3.zero;
@@ -393,6 +397,7 @@ public class QHummingbird : MonoBehaviour
     private void AddObservation()
     {
         state = 0;
+        
         RayCaster(transform.forward, 0);
         RayCaster(transform.up, 1);
         RayCaster(-transform.up, 2);
@@ -402,8 +407,7 @@ public class QHummingbird : MonoBehaviour
             RayCaster(transform.forward - transform.right * halfAngle * Mathf.Deg2Rad * (i - 1), i + 1);
         }
 
-
-        state += (int)Mathf.Pow(rayPoss, raySize);
+        state += (int)(Mathf.Pow(rayPoss, raySize) * nectarObtained);
     }
 
     /// <summary>
