@@ -83,6 +83,11 @@ public class QtableCar : MonoBehaviour
     void FixedUpdate()
     {
         QLearning();
+        if(!isTraining){
+            AddObservation();
+            int action = ChooseAction(state);
+            UseAction(action);
+        }
     }
 
     void UseAction(int i){
