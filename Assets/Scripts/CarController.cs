@@ -159,8 +159,4 @@ public class CarController : Agent
         }
     }
 
-    // private void OnTriggerExit(Collider other)
-    // {
-    //     grounded = false;
-    // }
 }

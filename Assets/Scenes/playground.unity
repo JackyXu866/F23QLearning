@@ -332,6 +332,30 @@ PrefabInstance:
       propertyPath: raySize
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 5234062859077502340, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: tags.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5234062859077502340, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: tags.Array.data[0]
+      value: Lawn
+      objectReference: {fileID: 0}
+    - target: {fileID: 5234062859077502340, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: tags.Array.data[1]
+      value: Fence
+      objectReference: {fileID: 0}
+    - target: {fileID: 5234062859077502340, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: tags.Array.data[2]
+      value: CheckPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 5234062859077502340, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: tags.Array.data[3]
+      value: Track
+      objectReference: {fileID: 0}
+    - target: {fileID: 5234062859077502340, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
+      propertyPath: tags.Array.data[4]
+      value: FinishLine
+      objectReference: {fileID: 0}
     - target: {fileID: 5819732342235309223, guid: 1a52ecc2d4f48074489693d1eb43f8bb, type: 3}
       propertyPath: m_Model
       value: 

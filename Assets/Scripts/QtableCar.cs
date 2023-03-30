@@ -18,13 +18,21 @@ public class QtableCar : MonoBehaviour
     [Header("Q Learning")]
     [SerializeField] bool isTraining = false;
     [SerializeField] int actionSize = 2;
-    [SerializeField] int stateSize = 8;
     [SerializeField] float gamma = 0.9f;
     [SerializeField] float epsilon = 0.2f;
     [SerializeField] float alpha = 0.5f;
+    [SerializeField] int episode = 100000;
+    [SerializeField] int maxStep = 5000;
+    int stateSize = 8;     // num of checkpoints +1
+    private int currEpisode = 0;
+    private bool episodeFinish = false;
+    private int currStep = 0;
     float[,] Q;
-    float[] states;
+    int state;
     int stateCount = 0;
+    float reward = 0;
+    Vector3 ogPos;
+    Quaternion ogRot;
 
     [Header("Raycast")]
     [SerializeField] int raySize = 6;
@@ -33,9 +41,7 @@ public class QtableCar : MonoBehaviour
     [SerializeField] float downDeg = -10;
     [SerializeField] float range = 20;
     [SerializeField] List<string> tags;
-
-
-    float rad;
+    int rayPoss = 0; // possible ray results
 
     TrackArea track;
 
@@ -44,14 +50,20 @@ public class QtableCar : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         track = GetComponentInParent<TrackArea>();
-        rad = Mathf.Rad2Deg * rad;
+
+        stateSize = track.checkpointSize + 1;
+        rayPoss = tags.Count + 1;
+        episodeFinish = false;
+
+        ogPos = transform.position;
+        ogRot = transform.rotation;
     }
 
     private void Awake()
     {
         if(raySize % 2 != 0) raySize++;
 
-        stateCount = raySize * tags.Count + stateSize;
+        stateCount = (int)Mathf.Pow(rayPoss, raySize) * stateSize;
         Q = new float[actionSize, stateCount];
 
         for (int i = 0;  i < actionSize; i++)
@@ -63,25 +75,35 @@ public class QtableCar : MonoBehaviour
             }
         }
 
-        states = new float[stateCount];
+        state = 0;
     }
 
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        RayCaster(transform.forward, 0);
-        RayCaster(-transform.forward, 1, 0.5f);
-        for(int i=2; i<raySize; i+=2)
-        {
-            RayCaster(transform.forward + transform.right * halfAngle * Mathf.Deg2Rad * (i - 1), i);
-            RayCaster(transform.forward - transform.right * halfAngle * Mathf.Deg2Rad * (i - 1), i + 1);
-        }
-        AddObservation();
-
         QLearning();
     }
 
+    void UseAction(int i){
+        switch (i)
+        {
+            case 0:
+                CarAccelerate(1f);
+                break;
+            case 1:
+                CarAccelerate(-1f);
+                break;
+            case 2:
+                CarTurning(1f);
+                break;
+            case 3:
+                CarTurning(-1f);
+                break;
+            default:
+                break;
+        }
+    }
 
     void CarAccelerate(float rate)
     {
@@ -128,40 +150,133 @@ public class QtableCar : MonoBehaviour
             {
                 if (hit.collider.CompareTag(tags[i]))
                 {
-                    states[stateSize-1 + index*tags.Count + i] = 1;
+                    // update state
+                    state += (int)Mathf.Pow(rayPoss, index) * (i + 1);
                 }
-                else
-                {
-                    states[stateSize-1 + index*tags.Count + i] = 0;
-                }
+
             }
             Debug.DrawRay(r.origin, r.direction * range * rangeConst, Color.red);
         }
         else
         {
-            for (int i = 0; i < tags.Count; i++)
-            {
-                states[stateSize-1 + index*tags.Count + i] = 0;
-            }
+            //update state
             Debug.DrawRay(r.origin, r.direction * range * rangeConst, Color.white);
         }
 
     }
 
     private void AddObservation(){
-        Quaternion r = transform.localRotation.normalized;
-        states[0] = r.x;
-        states[1] = r.y;
-        states[2] = r.z;
-        states[3] = r.w;
-        Vector3 v = rb.velocity.normalized;
-        states[4] = v.x;
-        states[5] = v.y;
-        states[6] = v.z;
-        states[7] = checkpoint;
+        state = 0;
+        RayCaster(transform.forward, 0);
+        RayCaster(-transform.forward, 1, 0.5f);
+        for(int i=2; i<raySize; i+=2)
+        {
+            RayCaster(transform.forward + transform.right * halfAngle * Mathf.Deg2Rad * (i - 1), i);
+            RayCaster(transform.forward - transform.right * halfAngle * Mathf.Deg2Rad * (i - 1), i + 1);
+        }
+        state += (int)Mathf.Pow(rayPoss, raySize) * checkpoint;
     }
 
     private void QLearning(){
+        if(!isTraining) return;
+        if(currEpisode >= episode) return;
+        if(episodeFinish) return;
 
+        AddObservation();
+
+        int action = ChooseAction(state);
+        float old_reward = reward;
+        float old_Q = Q[action, state];
+        int old_state = state;
+
+        UseAction(action);
+
+        AddObservation();
+
+        int maxAction = ChooseAction(state);
+        float maxQ = Q[maxAction, state];
+
+        float new_Q = old_Q + alpha * (old_reward + gamma * maxQ - old_Q);
+        Q[action, old_state] = new_Q;
+
+        currStep++;
+
+        if(currStep >= maxStep){
+            episodeFinish = true;
+            StartCoroutine(FinishEpisode());
+        }
     }
+
+    private IEnumerator FinishEpisode(){
+        yield return new WaitForSeconds(1f);
+        
+        track.AreaReset();
+        transform.position = ogPos;
+        transform.rotation = ogRot;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        currEpisode++;
+        reward = 0f;
+        currStep = 0;
+        checkpoint = 0;
+
+        episodeFinish = false;
+    }
+
+    private int ChooseAction(int state){
+        if(Random.Range(0f, 1f) < epsilon){
+            return Random.Range(0, actionSize);
+        }
+        else{
+            int bestAction = 0;
+            float bestValue = Q[bestAction, state];
+            for(int i = 1; i < actionSize; i++){
+                if(Q[i, state] > bestValue){
+                    bestAction = i;
+                    bestValue = Q[i, state];
+                }
+            }
+            return bestAction;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(isTraining && !episodeFinish){
+            if(other.CompareTag("CheckPoint")){
+                checkpoint++;
+                AddReward(10f);
+                other.enabled = false;
+            }
+            else if(other.CompareTag("Fence")){
+                AddReward(-2f);
+            }
+            else if(other.CompareTag("Lawn")){
+                AddReward(-.5f);
+            }
+            else if(other.CompareTag("FinishLine") && checkpoint == track.checkpointSize){
+                AddReward(60f);
+                track.AreaReset();
+                checkpoint = 0;
+            }
+        }
+    }
+
+    private void OnTriggerStay(Collider other) {
+        if(isTraining && !episodeFinish){
+            if(other.CompareTag("Track")){
+                AddReward(.05f * Time.deltaTime);
+            }
+            else if(other.CompareTag("Lawn")){
+                AddReward(-.05f * Time.deltaTime);
+            }
+        }
+    }
+
+    private void AddReward(float r){
+        reward += r;
+    }
+
+
 }
