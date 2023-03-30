@@ -54,6 +54,23 @@ public class QHummingbird : MonoBehaviour
     public float nectarObtained { get; private set; }
 
 
+
+    [Header("Raycast")]
+    [SerializeField] int raySize = 6;
+    [Range(0, 90)]
+    [SerializeField] int halfAngle = 30;
+    [SerializeField] float downDeg = -10;
+    [SerializeField] float range = 20;
+    [SerializeField] List<string> tags;
+    int rayPoss = 0; // possible ray results
+
+
+    float reward = 0;
+
+    int state;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -280,6 +297,43 @@ public class QHummingbird : MonoBehaviour
         }
     }
 
+
+    private void RayCaster(Vector3 dir, int index, float rangeConst = 1f)
+    {
+        dir = dir + transform.up * Mathf.Tan(downDeg * Mathf.Deg2Rad);
+
+        RaycastHit hit;
+        Ray r = new Ray(transform.position + transform.up * 0.5f, dir);
+
+        if (Physics.Raycast(r, out hit, range * rangeConst))
+        {
+            for (int i = 0; i < tags.Count; i++)
+            {
+                if (hit.collider.CompareTag(tags[i]))
+                {
+                    // update state
+                    state += (int)Mathf.Pow(rayPoss, index) * (i + 1);
+                }
+
+            }
+            Debug.DrawRay(r.origin, r.direction * range * rangeConst, Color.red);
+        }
+        else
+        {
+            //update state
+            Debug.DrawRay(r.origin, r.direction * range * rangeConst, Color.white);
+        }
+
+    }
+
+
+    private void AddReward(float r)
+    {
+        reward += r;
+    }
+
+
+
     /// <summary>
     /// Called every .02 seconds
     /// </summary>
@@ -291,6 +345,9 @@ public class QHummingbird : MonoBehaviour
             UpdateNearestFlower();
         }
     }
+
+
+
 
     private void Update()
     {
