@@ -303,7 +303,7 @@ public class QHummingbird : MonoBehaviour
         dir = dir + transform.up * Mathf.Tan(downDeg * Mathf.Deg2Rad);
 
         RaycastHit hit;
-        Ray r = new Ray(transform.position + transform.up * 0.5f, dir);
+        Ray r = new Ray(beaktip.position + transform.up * 0.5f, dir);
 
         if (Physics.Raycast(r, out hit, range * rangeConst))
         {
@@ -327,12 +327,58 @@ public class QHummingbird : MonoBehaviour
     }
 
 
+    public  void OnEpisodeBegin()
+    {
+        if (trainingMode)
+        {
+            //resets flower only when one agent in area
+            flowerArea.ResetFlowers();
+        }
+
+        //reset nectar obtained
+        nectarObtained = 0f;
+
+        //zero out velocities
+        rigidbody.velocity = Vector3.zero;
+        rigidbody.angularVelocity = Vector3.zero;
+
+
+        //default to respawn in front of flower
+        bool inFrontOfFlower = true;
+
+        if (trainingMode)
+        {
+            //50% of chance to spawn in front of flower
+            inFrontOfFlower = Random.value > 0.5f;
+        }
+
+        //move agent to a new random pos
+        MoveToSafeRandomPosition(inFrontOfFlower);
+
+        //recalculate the nearest flower
+        UpdateNearestFlower();
+    }
+
     private void AddReward(float r)
     {
         reward += r;
     }
 
+    private void AddObservation()
+    {
+        state = 0;
+        RayCaster(transform.forward, 0);
+        RayCaster(transform.up, 1);
+        RayCaster(-transform.up, 2);
+        for (int i = 3; i < raySize; i += 2)
+        {
+            RayCaster(transform.forward + transform.right * halfAngle * Mathf.Deg2Rad * (i - 1), i);
+            RayCaster(transform.forward - transform.right * halfAngle * Mathf.Deg2Rad * (i - 1), i + 1);
+        }
 
+
+        state += (int)Mathf.Pow(rayPoss, raySize);
+    }
 
     /// <summary>
     /// Called every .02 seconds
