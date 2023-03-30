@@ -208,12 +208,14 @@ public class QtableCar : MonoBehaviour
 
         if(currStep >= maxStep){
             episodeFinish = true;
-            StartCoroutine(FinishEpisode());
+            // StartCoroutine(FinishEpisode());
+            FinishEpisode();
         }
     }
 
-    private IEnumerator FinishEpisode(){
-        yield return new WaitForSeconds(1f);
+    private void FinishEpisode(){
+        // yield return new WaitForSeconds(1f);
+        // yield return null;
         
         track.AreaReset();
         transform.position = ogPos;
