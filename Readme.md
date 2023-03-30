@@ -29,3 +29,9 @@ To correct it, we upweighted the punishment for fence, increase the reward for s
 The agent for ml-agents is named van_1_black
 The agent for Qlearning is named van_q
 Please enable and disable in scene to see different result.
+
+
+## Scene 2: Hummingbird (demo)
+The training result was straightly borrowed from previous parctice of ML-agents.
+
+The code for the Qlearning table was only partly complete. the hummingbird has way more observations and status than driving a car.
