@@ -33,6 +33,7 @@ public class QtableCar : MonoBehaviour
     float reward = 0;
     Vector3 ogPos;
     Quaternion ogRot;
+    float totalReward = 0f;
 
     [Header("Raycast")]
     [SerializeField] int raySize = 6;
@@ -223,7 +224,13 @@ public class QtableCar : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        Debug.Log("Episode: " + currEpisode + " | Reward: " + reward + " | Checkpoint: " + checkpoint);
+        totalReward += reward;
+
+        // Debug.Log("Episode: " + currEpisode + " | Reward: " + reward + " | Checkpoint: " + checkpoint);
+        if(currEpisode % 100 == 0){
+            Debug.Log("Episode: " + currEpisode + " | Average Reward: " + totalReward/100 );
+            totalReward = 0;
+        }
 
         currEpisode++;
         reward = 0f;
