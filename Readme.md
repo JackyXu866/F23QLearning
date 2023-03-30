@@ -24,3 +24,8 @@ To correct it, we upweighted the punishment for fence, increase the reward for s
     In the third try, we try to increase the learning rate from 0.5 to 0.7 to make it learn faster. It is still training...
     
     Of course, the current episode is too small to make it actually work, but I think the Q table method is still worse than the DeepQ Learning method provide by the ML-Agent, because it is very space and time ineffiencient.
+
+### run your own
+The agent for ml-agents is named van_1_black
+The agent for Qlearning is named van_q
+Please enable and disable in scene to see different result.
