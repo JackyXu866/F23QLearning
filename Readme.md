@@ -21,7 +21,7 @@ To correct it, we upweighted the punishment for fence, increase the reward for s
     [Try02](car_q2.mp4)
     Now, it takes 4 times more time for each episode, and the reward is 4 times worse (around -500). The video is a record for 1000 episodes.
     
-    In the third try, we try to increase the learning rate from 0.5 to 0.7 to make it learn faster. It is still training...
+    In the third try, we try to increase the learning rate from 0.5 to 0.7 to make it learn faster. I also upscale the number of ray to 6, so there are 6^6*8 states. Even with 100 timeScale, 0.02 fixed update interval, it takes a second to do 5000 actions. So filling out a Q table even once of that size will be impossible. As the result, after 43000 episodes, the reward does not make a difference from the begin.
     
     Of course, the current episode is too small to make it actually work, but I think the Q table method is still worse than the DeepQ Learning method provide by the ML-Agent, because it is very space and time ineffiencient.
 
