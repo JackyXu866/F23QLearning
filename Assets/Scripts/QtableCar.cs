@@ -23,13 +23,13 @@ public class QtableCar : MonoBehaviour
     [SerializeField] float alpha = 0.5f;
     [SerializeField] int episode = 100000;
     [SerializeField] int maxStep = 5000;
-    int stateSize = 8;     // num of checkpoints +1
+    [SerializeField] int stateSize = 8;     // num of checkpoints +1
     private int currEpisode = 0;
     private bool episodeFinish = false;
     private int currStep = 0;
     float[,] Q;
     int state;
-    int stateCount = 0;
+    public int stateCount = 0;
     float reward = 0;
     Vector3 ogPos;
     Quaternion ogRot;
@@ -51,8 +51,6 @@ public class QtableCar : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         track = GetComponentInParent<TrackArea>();
 
-        stateSize = track.checkpointSize + 1;
-        rayPoss = tags.Count + 1;
         episodeFinish = false;
 
         ogPos = transform.position;
@@ -62,6 +60,8 @@ public class QtableCar : MonoBehaviour
     private void Awake()
     {
         if(raySize % 2 != 0) raySize++;
+
+        rayPoss = tags.Count + 1;
 
         stateCount = (int)Mathf.Pow(rayPoss, raySize) * stateSize;
         Q = new float[actionSize, stateCount];
@@ -220,6 +220,8 @@ public class QtableCar : MonoBehaviour
         transform.rotation = ogRot;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+
+        Debug.Log("Episode: " + currEpisode + " | Reward: " + reward + " | Checkpoint: " + checkpoint);
 
         currEpisode++;
         reward = 0f;
